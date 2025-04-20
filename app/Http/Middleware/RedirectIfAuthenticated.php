@@ -21,13 +21,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                $user = Auth::guard($guard)->user();
-                if ($user->isGuest()) {
-                    return redirect('/guest/home');
-                } elseif ($user->isUser()) {
-                    return redirect('/user/home');
+                // If user is already authenticated and trying to access login/register pages,
+                // redirect them to their appropriate home page
+                if ($request->is('login*') || $request->is('register*')) {
+                    return redirect(RouteServiceProvider::HOME);
                 }
-                return redirect(RouteServiceProvider::HOME);
             }
         }
 

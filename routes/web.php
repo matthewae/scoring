@@ -3,40 +3,42 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guest\SubmissionController as GuestSubmissionController;
 use App\Http\Controllers\User\SubmissionController as UserSubmissionController;
+use App\Http\Controllers\GuestController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth'])->group(function () {
-    // Redirect from /home based on user status
+// Public routes
+Route::get('/home', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+    if (auth()->user()->isGuest()) {
+        return redirect()->route('guest.home');
+    }
+    return redirect()->route('user.home');
+})->name('home');
+
+// Guest routes
+Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->group(function () {
     Route::get('/home', function () {
-        if (auth()->user()->isGuest()) {
-            return redirect()->route('guest.home');
-        } elseif (auth()->user()->isUser()) {
-            return redirect()->route('user.home');
-        }
-        return view('home');
+        return view('guest.home');
     })->name('home');
+    Route::get('/submissions', [GuestSubmissionController::class, 'index'])->name('submissions.index');
+    Route::post('/submissions', [GuestSubmissionController::class, 'store'])->name('submissions.store');
+    Route::post('/request-assistance', [GuestController::class, 'requestAssistance'])->name('request-assistance');
+});
 
-    // Guest routes
-    Route::middleware(['guest'])->prefix('guest')->name('guest.')->group(function () {
-        Route::get('/home', function () {
-            return view('guest.home');
-        })->name('home');
-        Route::get('/submissions', [GuestSubmissionController::class, 'index'])->name('submissions.index');
-        Route::post('/submissions', [GuestSubmissionController::class, 'store'])->name('submissions.store');
-    });
-
-    // User routes
-    Route::middleware(['user'])->prefix('user')->name('user.')->group(function () {
-        Route::get('/home', function () {
-            return view('user.home');
-        })->name('home');
-        Route::get('/submissions', [UserSubmissionController::class, 'index'])->name('submissions.index');
-        Route::post('/submissions/{submission}/score', [UserSubmissionController::class, 'score'])->name('submissions.score');
-        Route::get('/submissions/{submission}/download', [UserSubmissionController::class, 'download'])->name('submissions.download');
-    });
+// User routes
+Route::middleware(['auth', 'check.status'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/home', function () {
+        return view('user.home');
+    })->name('home');
+    Route::get('/submissions', [UserSubmissionController::class, 'index'])->name('submissions.index');
+    Route::post('/submissions/{submission}/score', [UserSubmissionController::class, 'score'])->name('submissions.score');
+    Route::get('/submissions/{submission}/download', [UserSubmissionController::class, 'download'])->name('submissions.download');
+    Route::post('/upload', [UserSubmissionController::class, 'upload'])->name('upload');
 });
 
 require __DIR__.'/auth.php';

@@ -61,4 +61,29 @@ class SubmissionController extends Controller
 
         return response()->download($tempFile, $zipFileName)->deleteFileAfterSend();
     }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'projectFiles' => 'required|array',
+            'projectFiles.*' => 'required|file|max:10240',
+        ]);
+
+        $submission = Submission::create([
+            'user_id' => auth()->id(),
+            'status' => 'pending',
+        ]);
+
+        foreach ($request->file('projectFiles') as $file) {
+            $submission->files()->create([
+                'original_name' => $file->getClientOriginalName(),
+                'file_path' => $file->store('submissions'),
+                'mime_type' => $file->getMimeType(),
+                'file_size' => $file->getSize(),
+            ]);
+        }
+
+        return redirect()->route('user.home')
+            ->with('status', __('Files uploaded successfully. Your submission is pending review.'));
+    }
 }

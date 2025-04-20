@@ -21,7 +21,7 @@
                 <div class="card-header">{{ __('Self Upload') }}</div>
                 <div class="card-body">
                     <p class="card-text">{{ __('Upload your project files directly for scoring.') }}</p>
-                    <form method="POST" action="{{ route('guest.upload') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('guest.submissions.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="projectFiles" class="form-label">{{ __('Project Files') }}</label>
