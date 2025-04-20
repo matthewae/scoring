@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
+class SubmissionFile extends Model
+{
+    protected $fillable = [
+        'submission_id',
+        'document_type_id',
+        'original_name',
+        'file_path',
+        'mime_type',
+        'file_size',
+        'uploaded_by_guest',
+        'memo'
+    ];
+
+    protected $casts = [
+        'uploaded_by_guest' => 'boolean',
+        'file_size' => 'integer'
+    ];
+
+    public function submission(): BelongsTo
+    {
+        return $this->belongsTo(Submission::class);
+    }
+
+    public function documentType(): BelongsTo
+    {
+        return $this->belongsTo(DocumentType::class);
+    }
+
+    public function documentScore(): HasOne
+    {
+        return $this->hasOne(DocumentScore::class);
+    }
+
+    public static function createFromUploadedFile(Submission $submission, UploadedFile $file, ?DocumentType $documentType = null, ?string $memo = null): self
+    {
+        $path = $file->store('submissions');
+
+        return static::create([
+            'submission_id' => $submission->id,
+            'original_name' => $file->getClientOriginalName(),
+            'file_path' => $path,
+            'mime_type' => $file->getMimeType(),
+            'file_size' => $file->getSize(),
+            'memo' => $memo,
+        ]);
+    }
+
+    public function getDownloadUrl(): string
+    {
+        return Storage::url($this->file_path);
+    }
+
+    public function delete(): bool
+    {
+        Storage::delete($this->file_path);
+        return parent::delete();
+    }
+}
