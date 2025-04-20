@@ -64,7 +64,7 @@
                             @foreach($pendingScores as $submission)
                                 <div class="list-group-item">
                                     <h6 class="mb-1">{{ __('Project Submission') }} #{{ $submission->id }}</h6>
-                                    <form method="POST" action="{{ route('user.score-submission', $submission->id) }}" class="mt-2">
+                                    <form method="POST" action="{{ route('user.submissions.score', $submission->id) }}" class="mt-2">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="score" class="form-label">{{ __('Score') }}</label>

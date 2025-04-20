@@ -32,9 +32,7 @@ Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->gr
 
 // User routes
 Route::middleware(['auth', 'check.status'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/home', function () {
-        return view('user.home');
-    })->name('home');
+    Route::get('/home', [\App\Http\Controllers\User\HomeController::class, 'index'])->name('home');
     Route::get('/submissions', [UserSubmissionController::class, 'index'])->name('submissions.index');
     Route::post('/submissions/{submission}/score', [UserSubmissionController::class, 'score'])->name('submissions.score');
     Route::get('/submissions/{submission}/download', [UserSubmissionController::class, 'download'])->name('submissions.download');
