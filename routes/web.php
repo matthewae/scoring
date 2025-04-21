@@ -10,24 +10,33 @@ Route::get('/', function () {
 });
 
 // Public routes
+Route::get('/files/{file}/download', [\App\Http\Controllers\FileController::class, 'download'])->name('files.download');
+
 Route::get('/home', function () {
     if (!auth()->check()) {
         return redirect()->route('login');
     }
     if (auth()->user()->isGuest()) {
-        return redirect()->route('guest.home');
+        return redirect()->route('guest.index');
     }
     return redirect()->route('user.home');
 })->name('home');
 
 // Guest routes
 Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->group(function () {
+    Route::get('/index', [GuestController::class, 'index'])->name('index');
     Route::get('/home', function () {
         return view('guest.home');
     })->name('home');
+    Route::get('/request-upload', [GuestController::class, 'showRequestUpload'])->name('request-upload');
+    Route::get('/upload', [GuestSubmissionController::class, 'create'])->name('upload');
     Route::get('/submissions', [GuestSubmissionController::class, 'index'])->name('submissions.index');
     Route::post('/submissions', [GuestSubmissionController::class, 'store'])->name('submissions.store');
+    Route::get('/self-upload', [GuestSubmissionController::class, 'create'])->name('self-upload');
+    Route::post('/self-upload', [GuestSubmissionController::class, 'store'])->name('self-upload.store');
     Route::post('/request-assistance', [GuestController::class, 'requestAssistance'])->name('request-assistance');
+    Route::post('/files/upload', [GuestSubmissionController::class, 'upload'])->name('files.upload');
+    Route::post('/upload-request', [GuestController::class, 'requestUpload'])->name('upload.request');
 });
 
 // User routes

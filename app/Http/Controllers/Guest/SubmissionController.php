@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Submission;
+use App\Models\DocumentType;
+use App\Models\SubmissionFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SubmissionController extends Controller
 {
+    public function create()
+    {
+        $documentTypes = DocumentType::all();
+        return view('guest.upload', compact('documentTypes'));
+    }
     public function index()
     {
         $submissions = Submission::where('user_id', Auth::id())
@@ -42,5 +49,32 @@ class SubmissionController extends Controller
 
         return redirect()->route('guest.submissions.index')
             ->with('status', __('Files uploaded successfully. Your submission is pending review.'));
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|max:10240',
+            'document_type_id' => 'required|exists:document_types,id',
+            'memo' => 'nullable|string|max:1000',
+        ]);
+
+        $submission = Submission::create([
+            'user_id' => Auth::id(),
+            'status' => 'pending',
+        ]);
+
+        $file = $request->file('file');
+        $documentType = DocumentType::findOrFail($request->document_type_id);
+        
+        $submissionFile = SubmissionFile::createFromUploadedFile(
+            $submission,
+            $file,
+            $documentType,
+            $request->memo
+        );
+
+        return redirect()->route('guest.submissions.index')
+            ->with('status', __('File uploaded successfully. Your submission is pending review.'));
     }
 }

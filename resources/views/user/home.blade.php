@@ -56,31 +56,61 @@
             </div>
 
             <div class="card">
-                <div class="card-header">{{ __('Scoring Management') }}</div>
+                <div class="card-header">{{ __('Guest Submissions Review') }}</div>
                 <div class="card-body">
-                    <p class="card-text">{{ __('Review and score submitted projects.') }}</p>
+                    <p class="card-text">{{ __('Review and score guest project submissions.') }}</p>
                     @if(count($pendingScores ?? []) > 0)
                         <div class="list-group">
                             @foreach($pendingScores as $submission)
                                 <div class="list-group-item">
                                     <h6 class="mb-1">{{ __('Project Submission') }} #{{ $submission->id }}</h6>
+                                    <div class="mb-3">
+                                        <a href="{{ route('user.submissions.download', $submission->id) }}" class="btn btn-secondary btn-sm">
+                                            {{ __('Download Files') }}
+                                        </a>
+                                    </div>
                                     <form method="POST" action="{{ route('user.submissions.score', $submission->id) }}" class="mt-2">
                                         @csrf
                                         <div class="mb-3">
-                                            <label for="score" class="form-label">{{ __('Score') }}</label>
-                                            <input type="number" class="form-control" id="score" name="score" min="0" max="100" required>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="score" id="approve{{ $submission->id }}" value="1" required>
+                                                <label class="form-check-label" for="approve{{ $submission->id }}">
+                                                    {{ __('Approve') }}
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="score" id="reject{{ $submission->id }}" value="0">
+                                                <label class="form-check-label" for="reject{{ $submission->id }}">
+                                                    {{ __('Reject') }}
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="feedback" class="form-label">{{ __('Feedback') }}</label>
-                                            <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
+                                        <div class="mb-3 memo-field" style="display: none;">
+                                            <label for="memo" class="form-label">{{ __('Rejection Memo') }}</label>
+                                            <textarea class="form-control" id="memo" name="memo" rows="3"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">{{ __('Submit Score') }}</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">{{ __('Submit Review') }}</button>
                                     </form>
                                 </div>
                             @endforeach
                         </div>
+                        <script>
+                            document.querySelectorAll('input[type="radio"][name="score"]').forEach(radio => {
+                                radio.addEventListener('change', function() {
+                                    const memoField = this.closest('form').querySelector('.memo-field');
+                                    const memoTextarea = memoField.querySelector('textarea');
+                                    if (this.value === '0') {
+                                        memoField.style.display = 'block';
+                                        memoTextarea.required = true;
+                                    } else {
+                                        memoField.style.display = 'none';
+                                        memoTextarea.required = false;
+                                    }
+                                });
+                            });
+                        </script>
                     @else
-                        <p class="text-muted">{{ __('No pending submissions to score.') }}</p>
+                        <p class="text-muted">{{ __('No pending submissions to review.') }}</p>
                     @endif
                 </div>
             </div>

@@ -11,7 +11,8 @@ class DocumentType extends Model
         'name',
         'code',
         'description',
-        'required'
+        'required',
+        'category'
     ];
 
     protected $casts = [

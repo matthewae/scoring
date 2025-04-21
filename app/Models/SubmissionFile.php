@@ -18,13 +18,46 @@ class SubmissionFile extends Model
         'mime_type',
         'file_size',
         'uploaded_by_guest',
-        'memo'
+        'memo',
+        'approval_status',
+        'approval_memo'
     ];
 
     protected $casts = [
         'uploaded_by_guest' => 'boolean',
         'file_size' => 'integer'
     ];
+
+    public function approve(string $memo = null): void
+    {
+        $this->update([
+            'approval_status' => 'approved',
+            'approval_memo' => $memo
+        ]);
+    }
+
+    public function reject(string $memo): void
+    {
+        $this->update([
+            'approval_status' => 'rejected',
+            'approval_memo' => $memo
+        ]);
+    }
+
+    public function isPending(): bool
+    {
+        return $this->approval_status === 'pending';
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approval_status === 'approved';
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->approval_status === 'rejected';
+    }
 
     public function submission(): BelongsTo
     {
@@ -47,6 +80,7 @@ class SubmissionFile extends Model
 
         return static::create([
             'submission_id' => $submission->id,
+            'document_type_id' => $documentType?->id,
             'original_name' => $file->getClientOriginalName(),
             'file_path' => $path,
             'mime_type' => $file->getMimeType(),

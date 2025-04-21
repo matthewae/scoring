@@ -30,18 +30,27 @@
                                     </div>
                                     <p class="mb-1">
                                         <strong>{{ __('Status') }}:</strong>
-                                        @if($submission->score)
-                                            <span class="badge bg-success">{{ __('Scored') }}</span>
+                                        @if($submission->score !== null)
+                                            @if($submission->score == 1)
+                                                <span class="badge bg-success">{{ __('Approved') }}</span>
+                                            @else
+                                                <span class="badge bg-danger">{{ __('Rejected') }}</span>
+                                            @endif
                                         @else
-                                            <span class="badge bg-warning text-dark">{{ __('Pending') }}</span>
+                                            <span class="badge bg-warning text-dark">{{ __('Pending Review') }}</span>
                                         @endif
                                     </p>
-                                    @if($submission->score)
+                                    @if($submission->score !== null)
                                         <div class="mt-2">
-                                            <p class="mb-1"><strong>{{ __('Score') }}:</strong> {{ $submission->score }}/100</p>
-                                            @if($submission->feedback)
-                                                <p class="mb-1"><strong>{{ __('Feedback') }}:</strong></p>
-                                                <p class="mb-1">{{ $submission->feedback }}</p>
+                                            <p class="mb-1">
+                                                <strong>{{ __('Review Result') }}:</strong>
+                                                {{ $submission->score == 1 ? __('Your submission has been approved.') : __('Your submission has been rejected.') }}
+                                            </p>
+                                            @if($submission->score == 0 && $submission->memo)
+                                                <div class="alert alert-info mt-2">
+                                                    <strong>{{ __('Rejection Memo') }}:</strong>
+                                                    <p class="mb-0">{{ $submission->memo }}</p>
+                                                </div>
                                             @endif
                                         </div>
                                     @endif
@@ -49,6 +58,9 @@
                                         <strong>{{ __('Files') }}:</strong>
                                         @foreach($submission->files as $file)
                                             <br>- {{ $file->original_name }}
+                                            <a href="{{ route('files.download', $file) }}" class="btn btn-link btn-sm">
+                                                {{ __('Download') }}
+                                            </a>
                                         @endforeach
                                     </p>
                                 </div>

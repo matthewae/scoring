@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (auth()->user()->isUser()) {
             return '/user/home';
         }
-        return '/guest/home';
+        return '/guest/index';
     }
 
     /**

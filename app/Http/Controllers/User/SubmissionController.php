@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Submission;
+use App\Models\SubmissionFile;
 use Illuminate\Http\Request;
 
 class SubmissionController extends Controller
@@ -41,6 +42,30 @@ class SubmissionController extends Controller
 
         return redirect()->route('user.submissions.index')
             ->with('status', __('Submission scored successfully.'));
+    }
+
+    public function approveFile(Request $request, SubmissionFile $file)
+    {
+        $request->validate([
+            'memo' => 'nullable|string|max:1000',
+        ]);
+
+        $file->approve($request->input('memo'));
+
+        return redirect()->back()
+            ->with('status', __('Document approved successfully.'));
+    }
+
+    public function rejectFile(Request $request, SubmissionFile $file)
+    {
+        $request->validate([
+            'memo' => 'required|string|max:1000',
+        ]);
+
+        $file->reject($request->input('memo'));
+
+        return redirect()->back()
+            ->with('status', __('Document rejected successfully.'))
     }
 
     public function download(Submission $submission)

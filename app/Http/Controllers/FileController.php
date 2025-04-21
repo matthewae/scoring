@@ -36,19 +36,16 @@ class FileController extends Controller
             ]);
         }
 
-        // Store the file
-        $path = $file->store('submissions/' . $submission->id);
-        
-        $submissionFile = SubmissionFile::create([
-            'submission_id' => $submission->id,
-            'document_type_id' => $documentType->id,
-            'original_name' => $file->getClientOriginalName(),
-            'file_path' => $path,
-            'mime_type' => $file->getMimeType(),
-            'file_size' => $file->getSize(),
-            'uploaded_by_guest' => $isGuestUpload,
-            'memo' => $request->memo
-        ]);
+        // Create the submission file using the helper method
+        $submissionFile = SubmissionFile::createFromUploadedFile(
+            $submission,
+            $file,
+            $documentType,
+            $request->memo
+        );
+
+        // Update the uploaded_by_guest flag
+        $submissionFile->update(['uploaded_by_guest' => $isGuestUpload]);
 
         return response()->json([
             'message' => 'File uploaded successfully',
