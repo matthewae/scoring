@@ -65,7 +65,7 @@ class SubmissionController extends Controller
         $file->reject($request->input('memo'));
 
         return redirect()->back()
-            ->with('status', __('Document rejected successfully.'))
+            ->with('status', __('Document rejected successfully.'));
     }
 
     public function download(Submission $submission)

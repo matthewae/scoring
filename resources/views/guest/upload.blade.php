@@ -32,8 +32,8 @@
                 <div class="card-body">
                     <div class="progress mb-3" style="height: 20px;">
                         <div class="progress-bar" role="progressbar" 
-                             style="width: {{ ($totalScore ?? 0) / ($maxScore ?? 1) * 100 }}%">
-                            {{ number_format(($totalScore ?? 0) / ($maxScore ?? 1) * 100, 1) }}%
+                             style="width: {{ ($maxScore > 0) ? (($totalScore ?? 0) / $maxScore * 100) : 0 }}%">
+                            {{ ($maxScore > 0) ? number_format(($totalScore ?? 0) / $maxScore * 100, 1) : 0 }}%
                         </div>
                     </div>
                     <div class="small text-muted">
@@ -43,7 +43,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <span>Rata-rata Skor:</span>
-                            <span>{{ number_format(($totalScore ?? 0) / ($maxScore ?? 1) * 100, 1) }}%</span>
+                            <span>{{ ($maxScore > 0) ? number_format(($totalScore ?? 0) / $maxScore * 100, 1) : 0 }}%</span>
                         </div>
                     </div>
                 </div>
@@ -92,13 +92,20 @@
                                             <tr>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <span title="{{ $type->description }}">
+                                                        <span>
                                                             {{ $type->name }}
-                                                            <i class="fas fa-info-circle text-muted"></i>
+                                                            @if($type->description)
+                                                                <i class="fas fa-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $type->description }}"></i>
+                                                            @endif
                                                         </span>
                                                     </div>
-                                                    @if(isset($submissionFiles[$type->id]) && $submissionFiles[$type->id]->approval_memo)
-                                                        <small class="text-muted d-block">Catatan: {{ $submissionFiles[$type->id]->approval_memo }}</small>
+                                                    @if(isset($submissionFiles[$type->id]))
+                                                        @if($submissionFiles[$type->id]->approval_memo)
+                                                            <small class="text-muted d-block">Catatan: {{ $submissionFiles[$type->id]->approval_memo }}</small>
+                                                        @endif
+                                                        @if($submissionFiles[$type->id]->memo)
+                                                            <small class="text-muted d-block">Memo: {{ $submissionFiles[$type->id]->memo }}</small>
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
@@ -139,11 +146,11 @@
                                                             <div class="progress-wrapper">
                                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                                     <span class="badge bg-success">{{ $submissionFiles[$type->id]->score }}/{{ $type->max_score }}</span>
-                                                                    <small class="text-success">{{ number_format(($submissionFiles[$type->id]->score / $type->max_score) * 100, 1) }}%</small>
+                                                                    <small class="text-success">{{ ($type->max_score > 0) ? number_format(($submissionFiles[$type->id]->score / $type->max_score) * 100, 1) : 0 }}%</small>
                                                                 </div>
                                                                 <div class="progress" style="height: 8px;">
                                                                     <div class="progress-bar bg-success" role="progressbar" 
-                                                                         style="width: {{ ($submissionFiles[$type->id]->score / $type->max_score) * 100 }}%">
+                                                                         style="width: {{ ($type->max_score > 0) ? (($submissionFiles[$type->id]->score / $type->max_score) * 100) : 0 }}%">
                                                                     </div>
                                                                 </div>
                                                             </div>

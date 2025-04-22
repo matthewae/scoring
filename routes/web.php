@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ScoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guest\SubmissionController as GuestSubmissionController;
 use App\Http\Controllers\User\SubmissionController as UserSubmissionController;
@@ -46,6 +47,9 @@ Route::middleware(['auth', 'check.status'])->prefix('user')->name('user.')->grou
     Route::post('/submissions/{submission}/score', [UserSubmissionController::class, 'score'])->name('submissions.score');
     Route::get('/submissions/{submission}/download', [UserSubmissionController::class, 'download'])->name('submissions.download');
     Route::post('/upload', [UserSubmissionController::class, 'upload'])->name('upload');
+    Route::get('/scoring', [ScoringController::class, 'userIndex'])->name('scoring');
 });
+
+Route::get('/guest/scoring', [ScoringController::class, 'guestIndex'])->name('guest.scoring');
 
 require __DIR__.'/auth.php';

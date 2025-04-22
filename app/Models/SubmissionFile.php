@@ -34,6 +34,8 @@ class SubmissionFile extends Model
             'approval_status' => 'approved',
             'approval_memo' => $memo
         ]);
+
+        $this->updateSubmissionStatus();
     }
 
     public function reject(string $memo): void
@@ -42,6 +44,8 @@ class SubmissionFile extends Model
             'approval_status' => 'rejected',
             'approval_memo' => $memo
         ]);
+
+        $this->updateSubmissionStatus();
     }
 
     public function isPending(): bool
@@ -92,6 +96,20 @@ class SubmissionFile extends Model
     public function getDownloadUrl(): string
     {
         return Storage::url($this->file_path);
+    }
+
+    protected function updateSubmissionStatus(): void
+    {
+        $submission = $this->submission;
+        $allFiles = $submission->files;
+        
+        if ($allFiles->contains(fn($file) => $file->isRejected())) {
+            $submission->update(['status' => 'rejected']);
+        } elseif ($allFiles->every(fn($file) => $file->isApproved())) {
+            $submission->update(['status' => 'approved']);
+        } else {
+            $submission->update(['status' => 'pending']);
+        }
     }
 
     public function delete(): bool

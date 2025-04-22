@@ -24,6 +24,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'status',
     ];
 
+    /**
+     * Get all submissions for the user.
+     */
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 
 
     /**

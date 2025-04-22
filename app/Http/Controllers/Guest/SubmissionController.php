@@ -13,8 +13,19 @@ class SubmissionController extends Controller
 {
     public function create()
     {
-        $documentTypes = DocumentType::all();
-        return view('guest.upload', compact('documentTypes'));
+        $documentTypes = DocumentType::orderBy('category')->get()->groupBy('category');
+        $submissionFiles = SubmissionFile::where('user_id', Auth::id())
+            ->whereNotNull('document_type_id')
+            ->get()
+            ->keyBy('document_type_id');
+
+        $totalScore = $submissionFiles->sum('score');
+        $maxScore = DocumentType::sum('max_score');
+        $approvedCount = $submissionFiles->where('status', 'approved')->count();
+        $totalDocuments = DocumentType::count();
+        
+        return view('guest.upload', compact('documentTypes', 'submissionFiles', 'totalScore', 'maxScore', 'approvedCount', 'totalDocuments'));
+
     }
     public function index()
     {

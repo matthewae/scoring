@@ -10,44 +10,93 @@ class DocumentTypeSeeder extends Seeder
     public function run(): void
     {
         $documentTypes = [
-            // Pre-tender Documents
-            ['name' => 'Dokumen DED perencana', 'code' => 'ded_perencana', 'description' => 'Laporan DED dan Master Plan', 'category' => 'Pre-tender Documents'],
-            ['name' => 'Notulensi hasil rapat koordinasi', 'code' => 'notulensi_koordinasi', 'description' => 'Notulensi hasil rapat koordinasi proses review penyusunan', 'category' => 'Pre-tender Documents'],
-            ['name' => 'Laporan review penyusunan DED', 'code' => 'review_ded', 'description' => 'Laporan review penyusunan DED dan evaluasi', 'category' => 'Pre-tender Documents'],
+            // Dokumen DED Perencana
+            ['name' => 'Laporan Pendahuluan Penyusunan Masterplan dan DED', 'code' => 'ded_pendahuluan', 'description' => 'Laporan awal penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Laporan Antara Pengembangan Rancangan', 'code' => 'ded_antara', 'description' => 'Laporan antara pengembangan rancangan penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Laporan Akhir Master Plan', 'code' => 'ded_akhir_mp', 'description' => 'Laporan akhir master plan', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Laporan Akhir Master Plan dan DED', 'code' => 'ded_akhir_full', 'description' => 'Laporan akhir master plan dan detail engineering design', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Rencana Kerja dan Syarat-Syarat (RKS)', 'code' => 'ded_rks', 'description' => 'Dokumen rencana kerja dan syarat-syarat', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Gambar Perencanaan', 'code' => 'ded_gambar', 'description' => 'Gambar-gambar perencanaan', 'category' => 'Dokumen DED Perencana'],
             
-            // Tender Documents
-            ['name' => 'Tender Konsultan MK', 'code' => 'tender_mk', 'description' => 'Dokumen tender konsultan manajemen konstruksi', 'category' => 'Tender Documents'],
-            ['name' => 'Hasil Review Pagu Anggaran', 'code' => 'review_anggaran', 'description' => 'Hasil review pagu anggaran konstruksi', 'category' => 'Tender Documents'],
-            ['name' => 'Dokumen DED for Tender', 'code' => 'ded_tender', 'description' => 'Dokumen DED untuk proses tender', 'category' => 'Tender Documents'],
-            ['name' => 'Hasil Penilaian Calon Penyedia', 'code' => 'penilaian_penyedia', 'description' => 'Hasil penilaian calon penyedia jasa', 'category' => 'Tender Documents'],
-            ['name' => 'Pengecekan Supplier', 'code' => 'cek_supplier', 'description' => 'Pengecekan kesanggupan supplier material', 'category' => 'Tender Documents'],
-            ['name' => 'Reviu Spesifikasi', 'code' => 'reviu_spesifikasi', 'description' => 'Reviu spesifikasi material', 'category' => 'Tender Documents'],
+            // Notulensi dan Review
+            ['name' => 'Notulensi Hasil Rapat Koordinasi', 'code' => 'notulensi_koordinasi', 'description' => 'Notulensi hasil rapat koordinasi proses review penyusunan DED', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Kesesuaian Desain dengan Standar', 'code' => 'review_kesesuaian', 'description' => 'Kesesuaian Desain (DED) dengan standar teknis dan kondisi lapangan', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Kesesuaian Gambar dengan RKS', 'code' => 'review_gambar', 'description' => 'Kesesuaian Gambar Desain dengan RKS dan RAB', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Review Kewajaran Harga', 'code' => 'review_harga', 'description' => 'Review kewajaran harga pada RAB', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Kesesuaian Waktu Pelaksanaan', 'code' => 'review_waktu', 'description' => 'Kesesuaian rencana waktu pelaksanaan', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Hasil Evaluasi Perbaikan', 'code' => 'review_evaluasi', 'description' => 'Hasil evaluasi yang telah diperbaiki atau dilengkapi oleh konsultan perencana', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Review SMKK', 'code' => 'review_smkk', 'description' => 'Hasil review dokumen KAK terhadap SMKK', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Program Mutu Pengawasan', 'code' => 'review_mutu', 'description' => 'Program mutu pengawasan', 'category' => 'Notulensi dan Review'],
+            ['name' => 'Notulensi Aanwijzing', 'code' => 'notulensi_aanwijzing', 'description' => 'Dokumen Notulensi terkait kegiatan aanwijzing', 'category' => 'Notulensi dan Review'],
             
-            // Construction Preparation Documents
-            ['name' => 'Jaminan Pelaksanaan', 'code' => 'jaminan_pelaksanaan', 'description' => 'Dokumen jaminan pelaksanaan', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Dokumen K3', 'code' => 'dok_k3', 'description' => 'Pengelolaan Kesehatan Kerja - Perlindungan Sosial Tenaga Kerja', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Kontrak Pelaksana', 'code' => 'kontrak_pelaksana', 'description' => 'Dokumen Kontrak Pelaksana Konstruksi', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Berita Acara Serah Terima', 'code' => 'bast_lokasi', 'description' => 'Berita Acara Penyerahan Lokasi Pekerjaan', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'SPMK', 'code' => 'spmk', 'description' => 'Surat Perintah Mulai Kerja Kontraktor Pelaksana', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Dokumen PCM', 'code' => 'dok_pcm', 'description' => 'Dokumen Pre Construction Meeting', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Struktur Organisasi', 'code' => 'struktur_organisasi', 'description' => 'Struktur Organisasi Proyek', 'category' => 'Construction Preparation Documents'],
-            ['name' => 'Metode Pelaksanaan', 'code' => 'metode_pelaksanaan', 'description' => 'Metode Pelaksanaan Pekerjaan', 'category' => 'Construction Preparation Documents'],
+            // Tender Konsultan MK
+            ['name' => 'Dokumen KAK Konsultan MK', 'code' => 'mk_kak', 'description' => 'Kerangka Acuan Kerja Konsultan MK', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Dokumen Penawaran Konsultan MK', 'code' => 'mk_penawaran', 'description' => 'Dokumen penawaran dari konsultan MK', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Team Leader', 'code' => 'mk_team_leader', 'description' => 'Dokumen tenaga ahli - Team Leader', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Tenaga Ahli Arsitektur', 'code' => 'mk_ahli_arsitek', 'description' => 'Dokumen tenaga ahli teknik arsitektur', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Tenaga Ahli Struktur/Sipil', 'code' => 'mk_ahli_struktur', 'description' => 'Dokumen tenaga ahli struktur/sipil', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Tenaga Ahli MEP', 'code' => 'mk_ahli_mep', 'description' => 'Dokumen tenaga ahli mekanikal/elektrikal', 'category' => 'Tender Konsultan MK'],
+            ['name' => 'Tenaga Ahli K3', 'code' => 'mk_ahli_k3', 'description' => 'Dokumen tenaga ahli K3 konstruksi', 'category' => 'Tender Konsultan MK'],
+            
+            // Personil Pengawas MK
+            ['name' => 'Site Engineer', 'code' => 'mk_site_engineer', 'description' => 'Dokumen Site Engineer', 'category' => 'Personil Pengawas MK'],
+            ['name' => 'Pengawas Arsitektur', 'code' => 'mk_pengawas_arsitek', 'description' => 'Dokumen pengawas arsitektur', 'category' => 'Personil Pengawas MK'],
+            ['name' => 'Pengawas Struktur', 'code' => 'mk_pengawas_struktur', 'description' => 'Dokumen pengawas struktur', 'category' => 'Personil Pengawas MK'],
+            ['name' => 'Pengawas MEP', 'code' => 'mk_pengawas_mep', 'description' => 'Dokumen pengawas MEP', 'category' => 'Personil Pengawas MK'],
 
-            // Laporan Berkala
-            ['name' => 'Laporan Bulanan', 'code' => 'laporan_bulanan', 'description' => 'Laporan kemajuan fisik pekerjaan bulanan', 'category' => 'Laporan Berkala'],
-            ['name' => 'Laporan Mingguan', 'code' => 'laporan_mingguan', 'description' => 'Laporan kemajuan fisik pekerjaan mingguan', 'category' => 'Laporan Berkala'],
-            ['name' => 'Laporan Harian', 'code' => 'laporan_harian', 'description' => 'Laporan kegiatan harian pekerjaan', 'category' => 'Laporan Berkala'],
+            // Personil Pendukung MK
+            ['name' => 'Juru Gambar/Drafter BIM', 'code' => 'mk_drafter', 'description' => 'Dokumen juru gambar/drafter BIM', 'category' => 'Personil Pendukung MK'],
+            ['name' => 'Administrasi dan Surveyor', 'code' => 'mk_admin_surveyor', 'description' => 'Dokumen administrasi dan surveyor', 'category' => 'Personil Pendukung MK'],
 
-            // Pengawasan Mutu
-            ['name' => 'Metode Kerja', 'code' => 'metode_kerja', 'description' => 'Metode kerja pengawasan mutu pekerjaan', 'category' => 'Pengawasan Mutu'],
-            ['name' => 'Pengawasan Proses', 'code' => 'pengawasan_proses', 'description' => 'Pengawasan terhadap proses tiap-tiap kegiatan', 'category' => 'Pengawasan Mutu'],
-            ['name' => 'Pengawasan Hasil', 'code' => 'pengawasan_hasil', 'description' => 'Pengawasan terhadap hasil pekerjaan', 'category' => 'Pengawasan Mutu'],
-            ['name' => 'Pemeriksaan Material', 'code' => 'pemeriksaan_material', 'description' => 'Pemeriksaan material saat penerimaan', 'category' => 'Pengawasan Mutu'],
-            ['name' => 'Pengujian Material', 'code' => 'pengujian_material', 'description' => 'Pemeriksaan dan pengujian berkala material', 'category' => 'Pengawasan Mutu'],
+            // Dokumen Persiapan
+            ['name' => 'BA Aanwijzing', 'code' => 'ba_aanwijzing', 'description' => 'Berita acara aanwijzing', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'Notulen Rapat Persiapan', 'code' => 'notulen_persiapan', 'description' => 'Notulen rapat persiapan pelaksanaan kontrak', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'Kontrak Pelaksanaan', 'code' => 'kontrak_pelaksanaan', 'description' => 'Kontrak pelaksanaan pekerjaan', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'Rencana PCM', 'code' => 'rencana_pcm', 'description' => 'Rencana Pre Construction Meeting', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'Rencana Persiapan Konstruksi', 'code' => 'rencana_persiapan', 'description' => 'Rencana pekerjaan persiapan konstruksi', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'BA Serah Terima Lahan', 'code' => 'ba_serah_terima', 'description' => 'Berita acara serah terima lahan', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'BA Pengukuran dan MC', 'code' => 'ba_pengukuran', 'description' => 'Berita acara pengukuran kembali lokasi pekerjaan (Uitzet) dan Mutual Check', 'category' => 'Dokumen Persiapan'],
 
-            // Penerimaan dan Pembayaran
-            ['name' => 'Berita Acara Pemeriksaan', 'code' => 'bap', 'description' => 'Berita acara hasil pemeriksaan bersama', 'category' => 'Penerimaan dan Pembayaran'],
-            ['name' => 'Dokumen Tagihan', 'code' => 'dokumen_tagihan', 'description' => 'Dokumen tagihan sesuai kontrak', 'category' => 'Penerimaan dan Pembayaran'],
+            // Dokumen Perizinan
+            ['name' => 'Surat Keterangan Rencana', 'code' => 'skrk', 'description' => 'Surat Keterangan Rencana Kota/Kab', 'category' => 'Dokumen Perizinan'],
+            ['name' => 'PBG', 'code' => 'pbg', 'description' => 'Persetujuan Bangunan Gedung (khususnya bangunan baru/perluasan)', 'category' => 'Dokumen Perizinan'],
+
+            // Pembayaran dan Jaminan
+            ['name' => 'Jaminan Uang Muka', 'code' => 'jaminan_um', 'description' => 'Jaminan Uang Muka', 'category' => 'Pembayaran dan Jaminan'],
+            ['name' => 'BA Pembayaran Uang Muka', 'code' => 'ba_um', 'description' => 'Berita Acara Pembayaran Uang Muka', 'category' => 'Pembayaran dan Jaminan'],
+            ['name' => 'Jaminan Pelaksanaan', 'code' => 'jaminan_pelaksanaan', 'description' => 'Jaminan Pelaksanaan', 'category' => 'Pembayaran dan Jaminan'],
+
+            // Schedule dan Perencanaan
+            ['name' => 'Schedule Peralatan', 'code' => 'schedule_alat', 'description' => 'Jadwal penggunaan peralatan', 'category' => 'Schedule dan Perencanaan'],
+            ['name' => 'Schedule Personil', 'code' => 'schedule_personil', 'description' => 'Jadwal personil inti dan pendukung', 'category' => 'Schedule dan Perencanaan'],
+            ['name' => 'Schedule Material', 'code' => 'schedule_material', 'description' => 'Jadwal pengadaan material', 'category' => 'Schedule dan Perencanaan'],
+
+            // Keluaran Konsultan MK
+            ['name' => 'Laporan Persiapan', 'code' => 'mk_lap_persiapan', 'description' => 'Laporan dan Berita Acara Persiapan Pelaksanaan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Buku Harian', 'code' => 'mk_buku_harian', 'description' => 'Buku harian yang memuat kejadian dan perintah penting', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Laporan Harian', 'code' => 'mk_lap_harian', 'description' => 'Laporan harian kegiatan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Laporan Mingguan dan Bulanan', 'code' => 'mk_lap_periodik', 'description' => 'Laporan mingguan dan bulanan sesuai resume laporan harian', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'BA Kemajuan Pekerjaan', 'code' => 'mk_ba_progress', 'description' => 'Berita Acara Kemajuan Pekerjaan untuk pembayaran angsuran', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Surat Perintah Perubahan', 'code' => 'mk_surat_perubahan', 'description' => 'Surat Perintah Perubahan Pekerjaan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'As-built Drawing', 'code' => 'mk_as_built', 'description' => 'Gambar sesuai dengan pelaksanaan dan manual peralatan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Laporan Site Meeting', 'code' => 'mk_lap_meeting', 'description' => 'Laporan rapat di lapangan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Shop Drawing', 'code' => 'mk_shop_drawing', 'description' => 'Gambar rincian pelaksanaan dan time schedule', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Foto Dokumentasi', 'code' => 'mk_foto', 'description' => 'Foto dokumentasi (0%, 30%, 50%, 75%, 100%)', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Laporan Akhir', 'code' => 'mk_lap_akhir', 'description' => 'Laporan akhir pekerjaan manajemen', 'category' => 'Keluaran Konsultan MK'],
+
+            // Pemeriksaan dan Mutual Check
+            ['name' => 'Pemeriksaan Gambar Kerja', 'code' => 'mc_gambar', 'description' => 'Pemeriksaan gambar kerja', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'Pemeriksaan Metode Kerja', 'code' => 'mc_metode', 'description' => 'Pemeriksaan metode kerja konstruksi', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'Rencana Pemeriksaan', 'code' => 'mc_rencana', 'description' => 'Rencana pemeriksaan dan pengujian', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'MC-0 Desain Awal', 'code' => 'mc0_desain', 'description' => 'Pemeriksaan terhadap desain awal', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'Review Desain', 'code' => 'mc0_review', 'description' => 'Penyesuaian desain/review desain', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'Penyesuaian Kuantitas', 'code' => 'mc0_kuantitas', 'description' => 'Penyesuaian kuantitas berdasarkan review desain', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'BA MC-0', 'code' => 'mc0_ba', 'description' => 'Berita Acara Hasil Pemeriksaan Bersama (MC-0)', 'category' => 'Pemeriksaan dan Mutual Check'],
+            ['name' => 'Site Instruction', 'code' => 'mc_site_instruction', 'description' => 'Instruksi lapangan', 'category' => 'Pemeriksaan dan Mutual Check'],
+
+            // Pengajuan Izin Kerja
+            ['name' => 'Request of Work', 'code' => 'izin_kerja', 'description' => 'Permohonan Izin Memulai Pekerjaan', 'category' => 'Pengajuan Izin Kerja'],
+            ['name' => 'Shop Drawing P-03', 'code' => 'izin_shop_drawing', 'description' => 'Gambar Kerja mengacu pada Prosedur (P-03)', 'category' => 'Pengajuan Izin Kerja'],
             ['name' => 'Hasil Pemeriksaan', 'code' => 'hasil_pemeriksaan', 'description' => 'Hasil pemeriksaan ketidaksesuaian spesifikasi', 'category' => 'Penerimaan dan Pembayaran'],
 
             // Pelaksanaan Konstruksi
