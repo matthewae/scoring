@@ -59,16 +59,26 @@
 <body>
 
 <div class="container py-5">
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a href="{{ route('guest.index') }}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+
     <!-- Project Dropdown -->
     <div class="project-select-wrapper">
-        <form method="GET" action="">
+        <form method="GET" action="{{ route('guest.upload') }}">
             <div class="row align-items-center">
                 <div class="col-md-4 mb-2">
                     <label for="project" class="form-label fw-bold">Pilih Proyek</label>
                     <select class="form-select" id="project" name="project">
-                        <option value="1">Proyek A</option>
-                        <option value="2">Proyek B</option>
-                        <option value="3">Proyek C</option>
+                        <option value="">-- Select Project --</option>
+                        @foreach($projects as $project)
+                            <option value="{{ $project->id }}" {{ request('project') == $project->id ? 'selected' : '' }}>
+                                {{ $project->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-2 mb-2">
@@ -186,8 +196,8 @@
                                             <td>
                                                 <div class="form-upload-group">
                                                     <input type="file" class="form-control form-control-sm @error('documents.' . $type->id) is-invalid @enderror"
-                                                           name="documents[{{ $type->id }}]"
-                                                           accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                                            name="documents[{{ $type->id }}]"
+                                                            accept=".pdf,.doc,.docx,.xls,.xlsx">
 
                                                     <button type="submit" class="btn btn-sm btn-primary btn-upload">
                                                         <i class="fas fa-upload me-1"></i> Upload

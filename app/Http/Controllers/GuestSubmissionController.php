@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Submission;
 use App\Models\ProjectDetail;
 use App\Models\DocumentType;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,9 @@ class GuestSubmissionController extends Controller
             return 'Other Documents';
         });
 
-        return view('guest.upload', compact('documentTypes'));
+        $projects = Project::where('is_active', true)->get();
+
+        return view('guest.upload', compact('documentTypes', 'projects'));
     }
 
     public function store(Request $request)
