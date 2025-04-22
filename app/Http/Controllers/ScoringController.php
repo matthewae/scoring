@@ -22,7 +22,7 @@ class ScoringController extends Controller
                 ->first();
         }
 
-        return view('user.scoring', compact('projects', 'documentTypes', 'submission'));
+        return view('user.scoring_standalone', compact('projects', 'documentTypes', 'submission'));
     }
 
     public function guestIndex(Request $request)
