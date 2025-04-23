@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guest\SubmissionController as GuestSubmissionController;
 use App\Http\Controllers\User\SubmissionController as UserSubmissionController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\AssistanceRequestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,41 +26,14 @@ Route::get('/home', function () {
     if (auth()->user()->isGuest()) {
         return redirect()->route('guest.index');
     }
-    return redirect()->route('user.home');
+    return redirect()->route('user.index');
 })->name('home');
 
 // Project management routes
 Route::resource('projects', ProjectController::class);
 
-// Guest upload routes with project filtering
-Route::get('/guest/upload', function (Request $request) {
-    $projects = Project::where('is_active', true)->get();
-    $selectedProject = null;
-
-    if ($request->has('project')) {
-        $selectedProject = Project::findOrFail($request->project);
-        $documentTypes = DocumentType::orderBy('category')->get()->groupBy('category');
-        $submissionFiles = SubmissionFile::where('project_id', $selectedProject->id)
-            ->get()
-            ->keyBy('document_type_id');
-        $totalScore = $submissionFiles->sum('score');
-        $maxScore = DocumentType::sum('max_score');
-        $approvedCount = $submissionFiles->where('status', 'approved')->count();
-        $totalDocuments = DocumentType::count();
-
-        return view('guest.upload', compact(
-            'projects',
-            'documentTypes',
-            'submissionFiles',
-            'totalScore',
-            'maxScore',
-            'approvedCount',
-            'totalDocuments'
-        ));
-    }
-
-    return view('guest.upload', compact('projects'));
-})->name('guest.upload');
+// Guest upload routes
+Route::get('/guest/upload', [GuestSubmissionController::class, 'create'])->name('guest.upload');
 
 // Guest routes
 Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->group(function () {
@@ -75,12 +49,13 @@ Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->gr
     Route::post('/self-upload', [GuestSubmissionController::class, 'store'])->name('self-upload.store');
     Route::post('/request-assistance', [GuestController::class, 'requestAssistance'])->name('request-assistance');
     Route::post('/files/upload', [GuestSubmissionController::class, 'upload'])->name('files.upload');
-    Route::post('/upload-request', [GuestController::class, 'requestUpload'])->name('upload.request');
+    Route::post('/upload-request', [AssistanceRequestController::class, 'store'])->name('upload.request');
+    Route::get('/projects', [AssistanceRequestController::class, 'getProjects'])->name('projects.list');
 });
 
 // User routes
 Route::middleware(['auth', 'check.status'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/home', [\App\Http\Controllers\User\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [\App\Http\Controllers\User\HomeController::class, 'index'])->name('index');
     Route::get('/submissions', [UserSubmissionController::class, 'index'])->name('submissions.index');
     Route::post('/submissions/{submission}/score', [UserSubmissionController::class, 'score'])->name('submissions.score');
     Route::get('/submissions/{submission}/download', [UserSubmissionController::class, 'download'])->name('submissions.download');

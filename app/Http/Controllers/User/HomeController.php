@@ -15,7 +15,7 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
-        return view('user.home', [
+        return view('user.index', [
             'pendingScores' => $pendingScores,
         ]);
     }

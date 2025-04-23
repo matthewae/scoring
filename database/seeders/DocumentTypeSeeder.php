@@ -11,8 +11,8 @@ class DocumentTypeSeeder extends Seeder
     {
         $documentTypes = [
             // Dokumen DED Perencana
-            ['name' => 'Laporan Pendahuluan Penyusunan Masterplan dan DED', 'code' => 'ded_pendahuluan', 'description' => 'Laporan awal penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
-            ['name' => 'Laporan Antara Pengembangan Rancangan', 'code' => 'ded_antara', 'description' => 'Laporan antara pengembangan rancangan penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Laporan Pendahuluan Penyusunan Masterplan dan DED', 'code' => 'ded_pendahuluan_mp', 'description' => 'Laporan awal penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
+            ['name' => 'Laporan Antara Pengembangan Rancangan', 'code' => 'ded_antara_rancangan', 'description' => 'Laporan antara pengembangan rancangan penyusunan masterplan dan DED', 'category' => 'Dokumen DED Perencana'],
             ['name' => 'Laporan Akhir Master Plan', 'code' => 'ded_akhir_mp', 'description' => 'Laporan akhir master plan', 'category' => 'Dokumen DED Perencana'],
             ['name' => 'Laporan Akhir Master Plan dan DED', 'code' => 'ded_akhir_full', 'description' => 'Laporan akhir master plan dan detail engineering design', 'category' => 'Dokumen DED Perencana'],
             ['name' => 'Rencana Kerja dan Syarat-Syarat (RKS)', 'code' => 'ded_rks', 'description' => 'Dokumen rencana kerja dan syarat-syarat', 'category' => 'Dokumen DED Perencana'],
@@ -64,7 +64,7 @@ class DocumentTypeSeeder extends Seeder
             ['name' => 'Pengecekan Kesanggupan Supplier Material', 'code' => 'cek_supplier', 'description' => 'Dokumen pengecekan kesanggupan supplier material', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Reviu Spesifikasi Material', 'code' => 'reviu_spesifikasi', 'description' => 'Dokumen reviu spesifikasi material', 'category' => 'Dokumen Persiapan'],
 
-            ['name' => 'Jaminan Pelaksanaan (jika ada)', 'code' => 'jaminan_pelaksanaan', 'description' => 'Dokumen jaminan pelaksanaan pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
+            ['name' => 'Jaminan Pelaksanaan (jika ada)', 'code' => 'jaminan_pelaksanaan_konstruksi', 'description' => 'Dokumen jaminan pelaksanaan pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Pengelolaan Kesehatan Kerja – Perlindungan Sosial Tenaga Kerja', 'code' => 'kesehatan_kerja', 'description' => 'Dokumen pengelolaan K3 dan perlindungan tenaga kerja', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Dokumen Kontrak Pelaksana Konstruksi', 'code' => 'kontrak_pelaksana', 'description' => 'Kontrak pelaksana pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Surat Penyerahan Lokasi Pekerjaan', 'code' => 'penyerahan_lokasi', 'description' => 'Berita acara penyerahan lokasi pekerjaan kepada kontraktor', 'category' => 'Dokumen Persiapan'],
@@ -79,8 +79,6 @@ class DocumentTypeSeeder extends Seeder
             ['name' => 'Mekanisme Pengawasan', 'code' => 'mekanisme_pengawasan', 'description' => 'Dokumen mekanisme pengawasan proyek', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Jadwal Pelaksanaan', 'code' => 'jadwal_pelaksanaan', 'description' => 'Jadwal pelaksanaan pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Mobilisasi personil inti, peralatan, dan material', 'code' => 'mobilisasi', 'description' => 'Dokumen mobilisasi personil inti, peralatan, dan material', 'category' => 'Dokumen Persiapan'],
-            ['name' => 'Metode Pelaksanaan – Gambaran umum tiap tahapan pekerjaan konstruksi', 'code' => 'metode_pelaksanaan', 'description' => 'Metode pelaksanaan pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
-
             ['name' => 'Metode Pelaksanaan – Gambaran umum tiap tahapan pekerjaan konstruksi', 'code' => 'metode_pelaksanaan', 'description' => 'Metode pelaksanaan pekerjaan konstruksi', 'category' => 'Dokumen Persiapan'],
             ['name' => 'Metode Pelaksanaan – Metode pelaksanaan pekerjaan tertentu', 'code' => 'metode_pelaksanaan_tertentu', 'description' => 'Metode pelaksanaan pekerjaan tertentu yang memerlukan perhatian khusus', 'category' => 'Dokumen Persiapan'],
 
@@ -107,7 +105,7 @@ class DocumentTypeSeeder extends Seeder
             // Pembayaran dan Jaminan
             ['name' => 'Jaminan Uang Muka', 'code' => 'jaminan_um', 'description' => 'Jaminan Uang Muka', 'category' => 'Pembayaran dan Jaminan'],
             ['name' => 'BA Pembayaran Uang Muka', 'code' => 'ba_um', 'description' => 'Berita Acara Pembayaran Uang Muka', 'category' => 'Pembayaran dan Jaminan'],
-            ['name' => 'Jaminan Pelaksanaan', 'code' => 'jaminan_pelaksanaan', 'description' => 'Jaminan Pelaksanaan', 'category' => 'Pembayaran dan Jaminan'],
+            ['name' => 'Jaminan Pelaksanaan', 'code' => 'jaminan_pelaksanaan_pekerjaan', 'description' => 'Jaminan Pelaksanaan', 'category' => 'Pembayaran dan Jaminan'],
 
             // Schedule dan Perencanaan
             ['name' => 'Schedule Peralatan', 'code' => 'schedule_alat', 'description' => 'Jadwal penggunaan peralatan', 'category' => 'Schedule dan Perencanaan'],
@@ -126,9 +124,9 @@ class DocumentTypeSeeder extends Seeder
             ['name' => 'Laporan Mingguan dan Bulanan', 'code' => 'mk_lap_periodik', 'description' => 'Laporan mingguan dan bulanan sesuai resume laporan harian', 'category' => 'Keluaran Konsultan MK'],
             ['name' => 'BA Kemajuan Pekerjaan', 'code' => 'mk_ba_progress', 'description' => 'Berita Acara Kemajuan Pekerjaan untuk pembayaran angsuran', 'category' => 'Keluaran Konsultan MK'],
             ['name' => 'Surat Perintah Perubahan', 'code' => 'mk_surat_perubahan', 'description' => 'Surat Perintah Perubahan Pekerjaan', 'category' => 'Keluaran Konsultan MK'],
-            ['name' => 'As-built Drawing', 'code' => 'mk_as_built', 'description' => 'Gambar sesuai dengan pelaksanaan dan manual peralatan', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'As-built Drawing', 'code' => 'mk_as_built_drawing', 'description' => 'Gambar sesuai dengan pelaksanaan dan manual peralatan', 'category' => 'Keluaran Konsultan MK'],
             ['name' => 'Laporan Site Meeting', 'code' => 'mk_lap_meeting', 'description' => 'Laporan rapat di lapangan', 'category' => 'Keluaran Konsultan MK'],
-            ['name' => 'Shop Drawing', 'code' => 'mk_shop_drawing', 'description' => 'Gambar rincian pelaksanaan dan time schedule', 'category' => 'Keluaran Konsultan MK'],
+            ['name' => 'Shop Drawing', 'code' => 'mk_shop_drawing_doc', 'description' => 'Gambar rincian pelaksanaan dan time schedule', 'category' => 'Keluaran Konsultan MK'],
             ['name' => 'Foto Dokumentasi', 'code' => 'mk_foto', 'description' => 'Foto dokumentasi (0%, 30%, 50%, 75%, 100%)', 'category' => 'Keluaran Konsultan MK'],
             ['name' => 'Laporan Akhir', 'code' => 'mk_lap_akhir', 'description' => 'Laporan akhir pekerjaan manajemen', 'category' => 'Keluaran Konsultan MK'],
 

@@ -1,69 +1,157 @@
-@extends('layouts.scoring')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Scoring System') }}</title>
+    
+    <!-- Bootstrap CSS and Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: #343a40; }
+        .card { 
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05); 
+            border: none;
+            border-radius: 0.5rem;
+        }
+        .card-header { 
+            background-color: #f8f9fa; 
+            border-bottom: 1px solid rgba(0,0,0,.05);
+            padding: 1.25rem;
+        }
+        .score-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .status-approved { 
+            background-color: #dcfce7; 
+            color: #166534; 
+        }
+        .status-rejected { 
+            background-color: #fee2e2; 
+            color: #991b1b; 
+        }
+        .status-pending { 
+            background-color: #fef3c7; 
+            color: #92400e; 
+        }
+        .document-item {
+            transition: all 0.2s ease-in-out;
+            border: 1px solid rgba(0,0,0,.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .document-item:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand">{{ config('app.name') }} - Project Scoring</span>
+            <a href="{{ route('guest.index') }}" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-house-door"></i> Dashboard
+            </a>
+        </div>
+    </nav>
 
-@section('content')
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-    <div class="p-6">
+    <div class="container">
         <!-- Project Selection -->
-        <div class="mb-8">
-            <label for="project" class="block text-sm font-medium text-gray-700 mb-2">Select Project</label>
-            <select id="project" name="project" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                <option value="">Choose a project...</option>
-                @foreach($projects as $project)
-                    <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>
-                        {{ $project->name }}
-                    </option>
-                @endforeach
-            </select>
+        <div class="card mb-4">
+            <div class="card-body">
+                <label for="project" class="form-label">Select Project</label>
+                <select id="project" name="project" class="form-select">
+                    <option value="">Choose a project...</option>
+                    @foreach($projects as $project)
+                        <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>
+                            {{ $project->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         @if(isset($submission))
         <!-- Scoring Results -->
-        <div class="space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                <h2 class="text-lg font-medium text-gray-900">Project Scoring Details</h2>
-                <p class="mt-1 text-sm text-gray-500">Overall Score: {{ $submission->score ?? 'Not scored yet' }}</p>
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="card-title h4 mb-0">Project Scoring Details</h2>
+                <div class="score-circle">{{ $submission->score ?? '0' }}</div>
             </div>
-
-            <!-- Document Categories -->
-            @foreach($documentTypes->groupBy('category') as $category => $types)
-            <div class="mt-6">
-                <h3 class="text-md font-medium text-gray-900 mb-4">{{ $category }}</h3>
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <div class="space-y-4">
+            <div class="card-body">
+                <!-- Document Categories -->
+                @foreach($documentTypes->groupBy('category') as $category => $types)
+                <div class="mb-4">
+                    <h3 class="h5 mb-3 d-flex align-items-center">
+                        <i class="bi bi-folder me-2"></i> {{ $category }}
+                    </h3>
+                    <div class="document-list">
                         @foreach($types as $type)
                             @php
                                 $file = $submission->files->where('document_type_id', $type->id)->first();
                                 $score = $file?->documentScore;
                             @endphp
-                            <div class="flex items-center justify-between">
-                                <div class="flex-1">
-                                    <h4 class="text-sm font-medium text-gray-900">{{ $type->name }}</h4>
-                                    @if($file)
-                                        <p class="text-sm text-gray-500">
-                                            Status: {{ ucfirst($file->approval_status) }}
-                                            @if($score)
-                                                | Score: {{ $score->score }}
+                            <div class="document-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h4 class="h6 mb-2">{{ $type->name }}</h4>
+                                        @if($file)
+                                            <div class="d-flex align-items-center gap-3 mb-2">
+                                                <span class="small text-muted">
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    Score: {{ $score ? $score->score : 'Not scored' }}
+                                                </span>
+                                            </div>
+                                            @if($file->approval_memo)
+                                                <p class="small text-muted mb-0">
+                                                    <i class="bi bi-chat-left-text me-1"></i>
+                                                    {{ $file->approval_memo }}
+                                                </p>
                                             @endif
-                                        </p>
-                                        @if($file->approval_memo)
-                                            <p class="text-sm text-gray-500">Note: {{ $file->approval_memo }}</p>
+                                        @else
+                                            <p class="small text-muted mb-0">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                No document uploaded
+                                            </p>
                                         @endif
-                                    @else
-                                        <p class="text-sm text-gray-500">No document uploaded</p>
-                                    @endif
-                                </div>
-                                <div class="ml-4">
+                                    </div>
+                                <div>
                                     @if($file && $file->isApproved())
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Approved
+                                        <span class="status-badge status-approved">
+                                            <i class="bi bi-check-circle"></i> Approved
                                         </span>
                                     @elseif($file && $file->isRejected())
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Rejected
+                                        <span class="status-badge status-rejected">
+                                            <i class="bi bi-x-circle"></i> Rejected
                                         </span>
                                     @elseif($file)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            Pending
+                                        <span class="status-badge status-pending">
+                                            <i class="bi bi-clock"></i> Pending
                                         </span>
                                     @endif
                                 </div>
@@ -71,22 +159,23 @@
                         @endforeach
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
         @else
-        <div class="text-center py-12">
-            <p class="text-gray-500">Please select a project to view scoring details.</p>
+        <div class="text-center py-5">
+            <i class="bi bi-folder2-open display-4 text-muted mb-3"></i>
+            <p class="text-muted mb-0">Please select a project to view scoring details.</p>
         </div>
         @endif
     </div>
-</div>
 
-@push('scripts')
-<script>
-    document.getElementById('project').addEventListener('change', function() {
-        window.location.href = '{{ route("guest.scoring") }}?project_id=' + this.value;
-    });
-</script>
-@endpush
-@endsection
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('project').addEventListener('change', function() {
+            window.location.href = '{{ route("guest.scoring") }}?project_id=' + this.value;
+        });
+    </script>
+</body>
+</html>

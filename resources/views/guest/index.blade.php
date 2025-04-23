@@ -138,7 +138,13 @@
                 <h5 class="fw-bold">Mandajaya</h5>
             </div>
             <a href="#" class="active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
-            <a href="#"><i class="fas fa-chart-line me-2"></i> View Score</a>
+            <a href="{{ route('guest.scoring') }}"><i class="fas fa-chart-line me-2"></i> View Score</a>
+            <form action="{{ route('logout') }}" method="POST" class="mt-auto" style="margin-top: auto !important;">
+                @csrf
+                <button type="submit" class="w-100 text-start border-0 bg-transparent" style="padding: 15px 25px; color: white; text-decoration: none;">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
+            </form>
         </nav>
 
         <!-- Content -->
@@ -180,7 +186,20 @@
                                     <p class="card-text mb-4">Let our team handle your document upload and verification.</p>
                                     <form action="{{ route('guest.upload.request') }}" method="POST">
                                         @csrf
+                                        <div class="mb-3">
+                                            <select name="project_id" class="form-control" required>
+                                                <option value="">Select Project</option>
+                                                @foreach($projects as $project)
+                                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <textarea name="notes" class="form-control mb-3" rows="3" placeholder="Describe the documents you need help with" required></textarea>
+                                        @if(session('success'))
+                                            <div class="alert alert-success mb-3">
+                                                {{ session('success') }}
+                                            </div>
+                                        @endif
                                         <button type="submit" class="btn btn-secondary">Submit Request</button>
                                     </form>
                                 </div>

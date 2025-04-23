@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Submission;
 use App\Models\DocumentType;
 use App\Models\SubmissionFile;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +25,9 @@ class SubmissionController extends Controller
         $approvedCount = $submissionFiles->where('status', 'approved')->count();
         $totalDocuments = DocumentType::count();
         
-        return view('guest.upload', compact('documentTypes', 'submissionFiles', 'totalScore', 'maxScore', 'approvedCount', 'totalDocuments'));
+        $projects = Project::where('is_active', true)->get();
+        
+        return view('guest.upload', compact('documentTypes', 'submissionFiles', 'totalScore', 'maxScore', 'approvedCount', 'totalDocuments', 'projects'));
 
     }
     public function index()

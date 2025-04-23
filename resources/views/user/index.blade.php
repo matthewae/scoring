@@ -55,7 +55,7 @@
                 </svg>
             </button>
         </div>
-        <a href="{{ route('user.home') }}" class="sidebar-link{{ Request::routeIs('user.home') ? ' active' : '' }}">
+        <a href="{{ route('user.index') }}" class="sidebar-link{{ Request::routeIs('user.index') ? ' active' : '' }}">
             {{ __('Dashboard') }}
         </a>
         <a href="{{ route('user.scoring') }}" class="sidebar-link{{ Request::routeIs('user.scoring') ? ' active' : '' }}">
@@ -91,38 +91,36 @@
                 @endif
 
                 <div class="card mb-4">
-                    <div class="card-header">{{ __('User Dashboard') }}</div>
+                    <div class="card-header">{{ __('Project Scoring Dashboard') }}</div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ __('Construction Project Scoring System') }}</h5>
-                        <p class="card-text">{{ __('Manage project submissions and scoring as an authorized user.') }}</p>
+                        <h5 class="card-title">{{ __('Guest Project Submissions') }}</h5>
+                        <p class="card-text">{{ __('Review and score pending project submissions from guests.') }}</p>
                     </div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header">{{ __('File Upload') }}</div>
-                    <div class="card-body">
-                        <p class="card-text">{{ __('Upload project files for scoring.') }}</p>
-                        <form method="POST" action="{{ route('user.upload') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="projectFiles" class="form-label">{{ __('Project Files') }}</label>
-                                <input type="file" class="form-control" id="projectFiles" name="projectFiles[]" multiple required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">{{ __('Upload Files') }}</button>
-                        </form>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>{{ __('Pending Assistance Requests') }}</span>
+                        <span class="badge bg-primary">{{ count($assistanceRequests ?? []) }} {{ __('Pending') }}</span>
                     </div>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-header">{{ __('Pending Assistance Requests') }}</div>
                     <div class="card-body">
                         <p class="card-text">{{ __('Review and manage guest assistance requests.') }}</p>
                         @if(count($assistanceRequests ?? []) > 0)
                             <div class="list-group">
                                 @foreach($assistanceRequests as $request)
                                     <div class="list-group-item">
-                                        <h6 class="mb-1">{{ __('Request from Guest') }} #{{ $request->id }}</h6>
-                                        <p class="mb-1">{{ $request->description }}</p>
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="mb-1">{{ __('Request from Guest') }} #{{ $request->id }}</h6>
+                                                <p class="mb-1">{{ $request->description }}</p>
+                                                @if($request->submission && $request->submission->project)
+                                                    <div class="text-muted small">
+                                                        <i class="bi bi-folder"></i> {{ __('Project') }}: {{ $request->submission->project->name }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <span class="badge bg-secondary">{{ $request->created_at->diffForHumans() }}</span>
+                                        </div>
                                         <form method="POST" action="{{ route('user.accept-request', $request->id) }}" class="mt-2">
                                             @csrf
                                             <button type="submit" class="btn btn-success btn-sm">{{ __('Accept Request') }}</button>
@@ -135,52 +133,11 @@
                         @endif
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">{{ __('Guest Submissions Review') }}</div>
-                    <div class="card-body">
-                        <p class="card-text">{{ __('Review and score guest project submissions.') }}</p>
-                        @if(count($pendingScores ?? []) > 0)
-                            <div class="list-group">
-                                @foreach($pendingScores as $submission)
-                                    <div class="list-group-item">
-                                        <h6 class="mb-1">{{ __('Project Submission') }} #{{ $submission->id }}</h6>
-                                        <div class="mb-3">
-                                            <a href="{{ route('user.submissions.download', $submission->id) }}" class="btn btn-secondary btn-sm">
-                                                {{ __('Download Files') }}
-                                            </a>
-                                        </div>
-                                        <form method="POST" action="{{ route('user.submissions.score', $submission->id) }}" class="mt-2">
-                                            @csrf
-                                            <div class="mb-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="score" id="approve{{ $submission->id }}" value="1" required>
-                                                    <label class="form-check-label" for="approve{{ $submission->id }}">
-                                                        {{ __('Approve') }}
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="score" id="reject{{ $submission->id }}" value="0">
-                                                    <label class="form-check-label" for="reject{{ $submission->id }}">
-                                                        {{ __('Reject') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3 memo-field" style="display: none;">
-                                                <label for="memo" class="form-label">{{ __('Rejection Memo') }}</label>
-                                                <textarea class="form-control" id="memo" name="memo" rows="3"></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary btn-sm">{{ __('Submit Review') }}</button>
-                                        </form>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <p class="text-muted">{{ __('No pending submissions to review.') }}</p>
-                        @endif
-                    </div>
-                </div>
             </div>
+        </div>
+    </div>
+
+    
         </div>
     </div>
 

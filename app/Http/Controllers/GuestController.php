@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DocumentType;
+use App\Models\Project;
 use App\Models\Submission;
 use Illuminate\Http\Request;
 
@@ -29,8 +30,9 @@ class GuestController extends Controller
         $submissions = Submission::with(['files.documentType', 'files.documentScore'])
             ->where('user_id', auth()->id())
             ->get();
+        $projects = Project::where('is_active', true)->get();
 
-        return view('guest.index', compact('documentTypes', 'submissions'));
+        return view('guest.index', compact('documentTypes', 'submissions', 'projects'));
     }
 
     /**
