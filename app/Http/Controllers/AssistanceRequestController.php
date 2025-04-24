@@ -44,6 +44,14 @@ class AssistanceRequestController extends Controller
             'status' => 'pending'
         ]);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Your assistance request has been submitted successfully.',
+                'request' => $assistanceRequest->load('project')
+            ]);
+        }
+
         return redirect()->route('assistance.index')
             ->with('success', 'Your assistance request has been submitted successfully.');
     }

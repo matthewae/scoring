@@ -48,9 +48,11 @@ Route::middleware(['auth', 'check.status'])->prefix('guest')->name('guest.')->gr
     Route::get('/self-upload', [GuestSubmissionController::class, 'create'])->name('self-upload');
     Route::post('/self-upload', [GuestSubmissionController::class, 'store'])->name('self-upload.store');
     Route::post('/request-assistance', [GuestController::class, 'requestAssistance'])->name('request-assistance');
+    Route::get('/scoring', [GuestController::class, 'scoring'])->name('scoring');
     Route::post('/files/upload', [GuestSubmissionController::class, 'upload'])->name('files.upload');
     Route::post('/upload-request', [AssistanceRequestController::class, 'store'])->name('upload.request');
     Route::get('/projects', [AssistanceRequestController::class, 'getProjects'])->name('projects.list');
+    Route::resource('assistance', AssistanceRequestController::class);
 });
 
 // User routes
@@ -63,6 +65,8 @@ Route::middleware(['auth', 'check.status'])->prefix('user')->name('user.')->grou
     Route::get('/scoring', [ScoringController::class, 'userIndex'])->name('scoring');
 });
 
-Route::get('/guest/scoring', [ScoringController::class, 'guestIndex'])->name('guest.scoring');
+Route::middleware(['auth', 'check.status'])->group(function () {
+    Route::get('/guest/scoring', [ScoringController::class, 'guestIndex'])->name('guest.scoring');
+});
 
 require __DIR__.'/auth.php';

@@ -54,6 +54,30 @@ class GuestController extends Controller
     }
 
     /**
+     * Show the scoring details for a project.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function scoring(Request $request)
+    {
+        $projects = Project::where('is_active', true)->get();
+        $submission = null;
+        $documentTypes = null;
+
+        if ($request->has('project_id')) {
+            $submission = Submission::with(['files.documentType', 'files.documentScore'])
+                ->where('project_id', $request->project_id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            $documentTypes = DocumentType::all()->groupBy('category');
+        }
+
+        return view('guest.scoring', compact('projects', 'submission', 'documentTypes'));
+    }
+
+    /**
      * Handle a guest's request for document upload assistance.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -13,11 +13,24 @@ class Project extends Model
         'name',
         'description',
         'user_id',
-        'is_active'
+        'is_active',
+        'pekerjaan',
+        'lokasi',
+        'kementerian',
+        'konsultan_perencana',
+        'konsultan_mk',
+        'kontraktor_pelaksana',
+        'metode_pemilihan',
+        'nilai_kontrak',
+        'tanggal_spmk',
+        'jangka_waktu'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'nilai_kontrak' => 'decimal:2',
+        'tanggal_spmk' => 'date',
+        'jangka_waktu' => 'integer'
     ];
 
     public function user(): BelongsTo

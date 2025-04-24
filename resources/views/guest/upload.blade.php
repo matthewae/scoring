@@ -196,8 +196,8 @@
                                             <td>
                                                 <div class="form-upload-group">
                                                     <input type="file" class="form-control form-control-sm @error('documents.' . $type->id) is-invalid @enderror"
-                                                            name="documents[{{ $type->id }}]"
-                                                            accept=".pdf,.doc,.docx,.xls,.xlsx">
+                                                           name="documents[{{ $type->id }}]"
+                                                           accept=".pdf,.doc,.docx,.xls,.xlsx">
 
                                                     <button type="submit" class="btn btn-sm btn-primary btn-upload">
                                                         <i class="fas fa-upload me-1"></i> Upload

@@ -68,9 +68,14 @@
     <nav class="navbar navbar-dark mb-4">
         <div class="container">
             <span class="navbar-brand">{{ config('app.name') }} - Project Scoring</span>
-            <a href="{{ route('user.index') }}" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-house-door"></i> Dashboard
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('projects.create') }}" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-plus-lg"></i> New Project
+                </a>
+                <a href="{{ route('user.index') }}" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-house-door"></i> Dashboard
+                </a>
+            </div>
         </div>
     </nav>
 

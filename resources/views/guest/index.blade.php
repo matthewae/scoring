@@ -184,7 +184,7 @@
                                 <div class="card-body text-center p-4">
                                     <h5 class="card-title fw-bold mb-3">Request Upload Assistance</h5>
                                     <p class="card-text mb-4">Let our team handle your document upload and verification.</p>
-                                    <form action="{{ route('guest.upload.request') }}" method="POST">
+                                    <form id="assistanceRequestForm" action="{{ route('guest.upload.request') }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
                                             <select name="project_id" class="form-control" required>
@@ -195,12 +195,8 @@
                                             </select>
                                         </div>
                                         <textarea name="notes" class="form-control mb-3" rows="3" placeholder="Describe the documents you need help with" required></textarea>
-                                        @if(session('success'))
-                                            <div class="alert alert-success mb-3">
-                                                {{ session('success') }}
-                                            </div>
-                                        @endif
-                                        <button type="submit" class="btn btn-secondary">Submit Request</button>
+                                        <div id="requestStatus" class="alert alert-success mb-3" style="display: none;"></div>
+                                        <button type="submit" class="btn btn-secondary" id="submitRequest">Submit Request</button>
                                     </form>
                                 </div>
                             </div>
@@ -214,8 +210,53 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Handle assistance request form submission
+            $('#assistanceRequestForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const submitButton = $('#submitRequest');
+                const statusDiv = $('#requestStatus');
+
+                // Disable submit button during submission
+                submitButton.prop('disabled', true);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        // Show success message
+                        statusDiv.removeClass('alert-danger').addClass('alert-success')
+                            .html(response.message)
+                            .show();
+
+                        // Reset form
+                        form.trigger('reset');
+
+                        // Hide success message after 5 seconds
+                        setTimeout(function() {
+                            statusDiv.fadeOut();
+                        }, 5000);
+                    },
+                    error: function(xhr) {
+                        // Show error message
+                        const message = xhr.responseJSON?.message || 'An error occurred while submitting your request.';
+                        statusDiv.removeClass('alert-success').addClass('alert-danger')
+                            .html(message)
+                            .show();
+                    },
+                    complete: function() {
+                        // Re-enable submit button
+                        submitButton.prop('disabled', false);
+                    }
+                });
+            });
             particlesJS('particles-js', {
                 particles: {
                     number: {

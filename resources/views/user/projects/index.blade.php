@@ -30,7 +30,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Project Name</th>
-                                <th>Description</th>
+                                <th>Pekerjaan</th>
+                                <th>Lokasi</th>
                                 <th>Status</th>
                                 <th>Created</th>
                                 <th class="text-end">Actions</th>
@@ -40,7 +41,8 @@
                             @forelse($projects as $project)
                                 <tr>
                                     <td class="align-middle">{{ $project->name }}</td>
-                                    <td class="align-middle">{{ Str::limit($project->description, 50) }}</td>
+                                    <td class="align-middle">{{ Str::limit($project->pekerjaan, 50) }}</td>
+                                    <td class="align-middle">{{ Str::limit($project->lokasi, 50) }}</td>
                                     <td class="align-middle">
                                         <span class="badge {{ $project->is_active ? 'bg-success' : 'bg-secondary' }}">
                                             {{ $project->is_active ? 'Active' : 'Inactive' }}
@@ -49,13 +51,16 @@
                                     <td class="align-middle">{{ $project->created_at->format('M d, Y') }}</td>
                                     <td class="text-end">
                                         <div class="btn-group">
-                                            <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('projects.show', $project) }}" class="btn btn-sm btn-outline-secondary" title="View Details">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('projects.edit', $project) }}" class="btn btn-sm btn-outline-primary" title="Edit Project">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <form action="{{ route('projects.destroy', $project) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this project?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this project?')" title="Delete Project">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>

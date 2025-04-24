@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class ProjectSeeder extends Seeder
 {
@@ -12,6 +14,16 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create a default admin user
+        $user = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => 'password',
+                'email_verified_at' => now(),
+                'status' => 'user'
+            ]
+        );
         $projects = [
             [
                 'name' => 'Commercial Building Construction',
@@ -41,6 +53,7 @@ class ProjectSeeder extends Seeder
         ];
 
         foreach ($projects as $project) {
+            $project['user_id'] = $user->id;
             Project::create($project);
         }
     }
