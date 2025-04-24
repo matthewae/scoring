@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('kontraktor_pelaksana')->after('konsultan_mk');
             $table->string('metode_pemilihan')->after('kontraktor_pelaksana');
             $table->decimal('nilai_kontrak', 15, 2)->after('metode_pemilihan');
-            $table->date('tanggal_spmk')->after('nilai_kontrak');
+            $table->date('tanggal_spmk')->nullable()->after('nilai_kontrak');
             $table->integer('jangka_waktu')->after('tanggal_spmk');
         });
     }
