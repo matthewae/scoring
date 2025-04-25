@@ -96,6 +96,59 @@
             </div>
 
             <div class="card-body">
+                @if(request('project_id') && $selectedProject)
+                    <div class="mb-4">
+                        <h5 class="mb-3">Project Details</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong>Work:</strong>
+                                    <p class="mb-2">{{ $selectedProject->pekerjaan }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Location:</strong>
+                                    <p class="mb-2">{{ $selectedProject->lokasi }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Ministry:</strong>
+                                    <p class="mb-2">{{ $selectedProject->kementerian }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Planning Consultant:</strong>
+                                    <p class="mb-2">{{ $selectedProject->konsultan_perencana }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <strong>MK Consultant:</strong>
+                                    <p class="mb-2">{{ $selectedProject->konsultan_mk }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Contractor:</strong>
+                                    <p class="mb-2">{{ $selectedProject->kontraktor_pelaksana }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Selection Method:</strong>
+                                    <p class="mb-2">{{ $selectedProject->metode_pemilihan }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Contract Value:</strong>
+                                    <p class="mb-2">Rp {{ number_format($selectedProject->nilai_kontrak, 2) }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>SPMK Date:</strong>
+                                    <p class="mb-2">{{ $selectedProject->tanggal_spmk ? $selectedProject->tanggal_spmk->format('d F Y') : '-' }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Project Duration:</strong>
+                                    <p class="mb-2">{{ $selectedProject->jangka_waktu }} days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                @endif
+
                 @if(isset($submission))
                     <div class="mb-4 pb-3 border-bottom">
                         <div class="d-flex align-items-center gap-3">

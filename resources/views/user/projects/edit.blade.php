@@ -102,7 +102,7 @@
 
                             <div class="mb-3">
                                 <label for="tanggal_spmk" class="form-label">Tanggal SPMK <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control @error('tanggal_spmk') is-invalid @enderror" id="tanggal_spmk" name="tanggal_spmk" value="{{ old('tanggal_spmk', $project->tanggal_spmk->format('Y-m-d')) }}" required>
+                                <input type="date" class="form-control @error('tanggal_spmk') is-invalid @enderror" id="tanggal_spmk" name="tanggal_spmk" value="{{ old('tanggal_spmk', optional($project->tanggal_spmk)->format('Y-m-d')) }}" required>
                                 @error('tanggal_spmk')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

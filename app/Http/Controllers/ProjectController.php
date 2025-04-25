@@ -62,4 +62,32 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')
             ->with('success', 'Project deleted successfully.');
     }
+
+    public function show(Project $project)
+    {
+        $this->authorize('view', $project);
+        
+        $documentTypes = $project->documentTypes()
+            ->with(['submissionFiles' => function($query) use ($project) {
+                $query->whereHas('submission', function($q) use ($project) {
+                    $q->where('project_id', $project->id);
+                });
+            }])
+            ->get()
+            ->groupBy('category');
+
+        $totalScore = $project->submissions()->sum('score');
+        $maxScore = $project->documentTypes()->sum('max_score');
+        $approvedCount = $project->submissions()->where('status', 'approved')->count();
+        $totalDocuments = $project->documentTypes()->count();
+
+        return view('user.projects.show', compact(
+            'project',
+            'documentTypes',
+            'totalScore',
+            'maxScore',
+            'approvedCount',
+            'totalDocuments'
+        ));
+    }
 }
