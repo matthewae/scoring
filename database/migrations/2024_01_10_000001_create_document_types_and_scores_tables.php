@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('required')->default(true);
+            $table->string('period')->nullable();
+            $table->integer('max_score')->default(100);
             $table->timestamps();
         });
 

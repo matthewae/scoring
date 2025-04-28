@@ -220,13 +220,13 @@
                             </table>
                         </div>
 
-                        <div class="d-grid">
+                        <!-- <div class="d-grid">
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-paper-plane me-1"></i> Submit Semua Upload
                             </button>
                         </div>
                     </form>
-                    <small class="text-muted d-block mt-2">Format: PDF, DOC, DOCX, XLS, XLSX (max 10MB)</small>
+                    <small class="text-muted d-block mt-2">Format: PDF, DOC, DOCX, XLS, XLSX (max 10MB)</small> -->
                 </div>
             </div>
         </div>

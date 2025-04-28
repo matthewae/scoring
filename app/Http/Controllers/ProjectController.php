@@ -24,6 +24,16 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'pekerjaan' => 'required|string|max:255',
+            'lokasi' => 'required|string|max:255',
+            'kementerian' => 'required|string|max:255',
+            'konsultan_perencana' => 'required|string|max:255',
+            'konsultan_mk' => 'required|string|max:255',
+            'kontraktor_pelaksana' => 'required|string|max:255',
+            'metode_pemilihan' => 'required|string|max:255',
+            'nilai_kontrak' => 'required|numeric',
+            'tanggal_spmk' => 'required|date',
+            'jangka_waktu' => 'required|integer'
         ]);
 
         $project = Auth::user()->projects()->create($validated);
@@ -46,6 +56,16 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'is_active' => 'boolean',
+            'pekerjaan' => 'required|string|max:255',
+            'lokasi' => 'required|string|max:255',
+            'kementerian' => 'required|string|max:255',
+            'konsultan_perencana' => 'required|string|max:255',
+            'konsultan_mk' => 'required|string|max:255',
+            'kontraktor_pelaksana' => 'required|string|max:255',
+            'metode_pemilihan' => 'required|string|max:255',
+            'nilai_kontrak' => 'required|numeric',
+            'tanggal_spmk' => 'required|date',
+            'jangka_waktu' => 'required|integer'
         ]);
 
         $project->update($validated);

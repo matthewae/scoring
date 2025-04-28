@@ -41,41 +41,65 @@ class GuestSubmissionController extends Controller
             'tanggal_spmk' => 'required|date',
             'jangka_waktu' => 'required|integer|min:1',
             'documents' => 'required|array',
-            'documents.*' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240'
+            'documents.*' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:1536000'
         ]);
+
+        $project = Project::findOrFail($request->project);
 
         try {
             DB::beginTransaction();
 
-            $submission = Submission::create([
-                'type' => 'guest_upload',
-                'status' => 'pending'
-            ]);
+            // Find existing submission for this project or create new one
+            $submission = Submission::firstOrCreate(
+                ['project_id' => $project->id, 'type' => 'guest_upload'],
+                ['status' => 'pending']
+            );
 
-            $projectDetail = ProjectDetail::create(array_merge(
-                $request->only([
-                    'pekerjaan', 'lokasi', 'institusi', 'konsultan_perencana',
-                    'konsultan_mk', 'kontraktor_pelaksana', 'metode_pemilihan',
-                    'nilai_kontrak', 'tanggal_spmk', 'jangka_waktu'
-                ]),
-                ['submission_id' => $submission->id]
-            ));
+            if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $documentTypeId => $file) {
+                    // Validate document type exists
+                    $documentType = DocumentType::find($documentTypeId);
+                    if (!$documentType) {
+                        throw new \Exception('Invalid document type provided.');
+                    }
 
-            foreach ($request->file('documents') as $documentTypeId => $file) {
-                $path = $file->store('submissions/' . $submission->id);
-                $submission->files()->create([
-                    'document_type_id' => $documentTypeId,
-                    'file_path' => $path,
-                    'original_name' => $file->getClientOriginalName()
-                ]);
+                    // Check if a file for this document type already exists
+                    $existingFile = $submission->files()
+                        ->where('document_type_id', $documentTypeId)
+                        ->first();
+
+                    // Delete old file if it exists
+                    if ($existingFile) {
+                        // Delete the physical file
+                        if (file_exists(storage_path('app/' . $existingFile->file_path))) {
+                            unlink(storage_path('app/' . $existingFile->file_path));
+                        }
+                        $existingFile->delete();
+                    }
+
+                    // Store the new file
+                    $path = $file->store('submissions/' . $submission->id);
+                    
+                    // Create new submission file with proper document type association
+                    $submission->files()->create([
+                        'document_type_id' => $documentType->id,
+                        'file_path' => $path,
+                        'original_name' => $file->getClientOriginalName(),
+                        'mime_type' => $file->getMimeType(),
+                        'file_size' => $file->getSize(),
+                        'status' => 'pending',
+                        'score' => 0,
+                        'average_score' => 0
+                    ]);
+                }
             }
 
             DB::commit();
-            return redirect()->route('home')->with('success', 'Dokumen berhasil diunggah dan akan diverifikasi.');
+            return back()->with('success', 'Dokumen berhasil diunggah dan akan diverifikasi.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan saat mengunggah dokumen. Silakan coba lagi.');
+            return back()->with('error', 'Terjadi kesalahan saat mengunggah dokumen: ' . $e->getMessage());
         }
     }
 }

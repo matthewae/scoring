@@ -10,7 +10,12 @@
 <body class="bg-light">
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Manage Projects</h2>
+            <div class="d-flex align-items-center gap-3">
+                <a href="{{ route('user.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-house-door me-1"></i> Dashboard
+                </a>
+                <h2 class="mb-0">Manage Projects</h2>
+            </div>
             <a href="{{ route('projects.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i> New Project
             </a>

@@ -37,19 +37,22 @@ class ScoringController extends Controller
                     }
                 ])
                 ->first();
+        }
 
-        return view('user.scoring_standalone', compact('projects', 'documentTypes', 'submission'));
+        return view('user.scoring_standalone', compact('projects', 'documentTypes', 'submission', 'selectedProject'));
     }
 
     public function guestIndex(Request $request)
     {
-        $projects = ProjectDetail::all();
+        $projects = Project::where('is_active', true)
+            ->orderBy('name')
+            ->get();
         $documentTypes = DocumentType::all();
         $submission = null;
 
         if ($request->has('project_id')) {
             $submission = Submission::where('project_id', $request->project_id)
-                ->where('guest_id', session('guest_id'))
+                ->where('user_id', auth()->id())
                 ->with(['files.documentScore', 'files.documentType'])
                 ->first();
         }

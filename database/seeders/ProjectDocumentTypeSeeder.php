@@ -25,13 +25,14 @@ class ProjectDocumentTypeSeeder extends Seeder
             foreach ($documentTypes as $documentType) {
                 $isRequired = in_array($documentType->category, $requiredCategories);
                 
-                $project->documentTypes()->attach($documentType->id, [
-                    'is_required' => $isRequired,
-                    'created_at' => now(),
-                    'updated_at' => now()
+                $project->documentTypes()->syncWithoutDetaching([
+                    $documentType->id => [
+                        'is_required' => $isRequired,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
                 ]);
             }
-        }
         }
     }
 }

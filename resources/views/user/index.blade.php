@@ -61,6 +61,9 @@
         <a href="{{ route('user.scoring') }}" class="sidebar-link{{ Request::routeIs('user.scoring') ? ' active' : '' }}">
             {{ __('Project Scoring') }}
         </a>
+        <a href="{{ route('projects.index') }}" class="sidebar-link{{ Request::routeIs('projects.index') ? ' active' : '' }}">
+            {{ __('Manage Projects') }}
+        </a>
     </div>
 
     <nav class="navbar navbar-expand-md navbar-dark mb-4">
