@@ -29,29 +29,29 @@ class GuestSubmissionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'pekerjaan' => 'required|string|max:255',
-            'lokasi' => 'required|string|max:255',
-            'institusi' => 'required|string|max:255',
-            'konsultan_perencana' => 'nullable|string|max:255',
-            'konsultan_mk' => 'nullable|string|max:255',
-            'kontraktor_pelaksana' => 'nullable|string|max:255',
-            'metode_pemilihan' => 'required|string|max:255',
-            'nilai_kontrak' => 'required|numeric|min:0',
-            'tanggal_spmk' => 'required|date',
-            'jangka_waktu' => 'required|integer|min:1',
-            'documents' => 'required|array',
-            'documents.*' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:1536000'
-        ]);
+        // Check if user is authenticated and is a guest
+        if (!auth()->check() || !auth()->user()->isGuest()) {
+            return back()->with('error', 'Unauthorized access. Please login as a guest user.');
+        }
 
-        $project = Project::findOrFail($request->project);
+        $request->validate([
+            'documents' => 'required|array',
+            'documents.*' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:1536000'
+        ], [
+            'documents.required' => 'Please select at least one document to upload.',
+            'documents.array' => 'Invalid document format.',
+            'documents.*.required' => 'Each selected document is required.',
+            'documents.*.file' => 'Each upload must be a valid file.',
+            'documents.*.mimes' => 'Documents must be in PDF, DOC, DOCX, XLS, or XLSX format.',
+            'documents.*.max' => 'Document size must not exceed 1.5GB.'
+        ]);
 
         try {
             DB::beginTransaction();
 
             // Find existing submission for this project or create new one
             $submission = Submission::firstOrCreate(
-                ['project_id' => $project->id, 'type' => 'guest_upload'],
+                ['project_id' => $request->project, 'type' => 'guest_upload'],
                 ['status' => 'pending']
             );
 
@@ -95,11 +95,17 @@ class GuestSubmissionController extends Controller
             }
 
             DB::commit();
-            return back()->with('success', 'Dokumen berhasil diunggah dan akan diverifikasi.');
+            return back()->with('success', 'Documents have been successfully uploaded and will be verified.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan saat mengunggah dokumen: ' . $e->getMessage());
+            
+            $errorMessage = 'An error occurred while uploading documents.';
+            if (app()->environment('local', 'development')) {
+                $errorMessage .= ' ' . $e->getMessage();
+            }
+            
+            return back()->with('error', $errorMessage);
         }
     }
 }

@@ -53,21 +53,32 @@ class FileController extends Controller
         ]);
     }
 
-    public function download(SubmissionFile $file): StreamedResponse
+    public function download(SubmissionFile $file)
     {
-        // Check if user is authorized to download
-        if (!auth()->check() && !$file->uploaded_by_guest) {
-            abort(403, 'Unauthorized access');
-        }
+        try {
+            // Check if user is authorized to download
+            if (!auth()->check() && !$file->uploaded_by_guest) {
+                return back()->with('error', 'You are not authorized to download this file.');
+            }
 
-        if (!Storage::exists($file->file_path)) {
-            abort(404, 'File not found');
-        }
+            if (!Storage::exists($file->file_path)) {
+                return back()->with('error', 'The requested file could not be found. It may have been moved or deleted.');
+            }
 
-        return Storage::download(
-            $file->file_path,
-            $file->original_name,
-            ['Content-Type' => $file->mime_type]
-        );
+            return Storage::download(
+                $file->file_path,
+                $file->original_name,
+                ['Content-Type' => $file->mime_type]
+            );
+        } catch (\Exception $e) {
+            // Log the error for administrators
+            \Log::error('File download failed: ' . $e->getMessage(), [
+                'file_id' => $file->id,
+                'file_path' => $file->file_path,
+                'user_id' => auth()->id()
+            ]);
+
+            return back()->with('error', 'An error occurred while downloading the file. Please try again later.');
+        }
     }
 }

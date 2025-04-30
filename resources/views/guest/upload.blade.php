@@ -205,7 +205,7 @@
 
                                                     @if(isset($submissionFiles[$type->id]) && $submissionFiles[$type->id]->file_path)
                                                         <a href="{{ route('download.file', $submissionFiles[$type->id]->id) }}" class="btn btn-sm btn-outline-secondary" title="Download File">
-                                                            <i class="fas fa-download"></i>
+                                                            <i cl   ss="fas fa-download"></i>
                                                         </a>
                                                     @endif
                                                 </div>
@@ -227,7 +227,7 @@
                         </div>
                     </form>
                     <small class="text-muted d-block mt-2">Format: PDF, DOC, DOCX, XLS, XLSX (max 10MB)</small> -->
-                </div>
+                </div>  
             </div>
         </div>
     </div>

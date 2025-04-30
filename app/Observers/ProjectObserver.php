@@ -11,16 +11,21 @@ class ProjectObserver
     {
         $documentTypes = DocumentType::all();
         
-        // Define categories that contain required documents
+        // Define categories and their required status based on the government checklist
         $requiredCategories = [
-            'Dokumen DED Perencana',
-            'Dokumen Persiapan',
-            'Dokumen Perizinan',
-            'Pembayaran dan Jaminan'
+            'Dokumen DED Perencana' => true,
+            'Notulensi dan Review' => true,
+            'Tender Konsultan MK' => true,
+            'Personil Pengawas MK' => true,
+            'Personil Pendukung MK' => true,
+            'Dokumen Persiapan' => true,
+            'Dokumen Perizinan' => true,
+            'Pembayaran dan Jaminan' => true
         ];
 
         foreach ($documentTypes as $documentType) {
-            $isRequired = in_array($documentType->category, $requiredCategories);
+            // Check if the category exists in our mapping, default to true if not specified
+            $isRequired = $requiredCategories[$documentType->category] ?? true;
             
             $project->documentTypes()->attach($documentType->id, [
                 'is_required' => $isRequired,
